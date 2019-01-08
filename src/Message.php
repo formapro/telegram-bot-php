@@ -1,0 +1,43 @@
+<?php
+
+namespace Formapro\TelegramBot;
+
+use function Makasim\Values\get_object;
+use function Makasim\Values\get_value;
+
+class Message
+{
+    private $values = [];
+
+    private $objects = [];
+
+    public function getMessageId(): int
+    {
+        return get_value($this, 'message_id');
+    }
+
+    public function getDate(): int
+    {
+        return get_value($this, 'date');
+    }
+
+    public function getChat(): Chat
+    {
+        return get_object($this, 'chat', Chat::class);
+    }
+
+    public function getFrom(): ?User
+    {
+        return get_object($this, 'from', User::class);
+    }
+
+    public function getContact(): ?Contact
+    {
+        return get_object($this, 'contact', Contact::class);
+    }
+
+    public function getText(): ?string
+    {
+        return get_value($this, 'text');
+    }
+}
