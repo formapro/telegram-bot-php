@@ -40,22 +40,6 @@ echo str($response);
 
 ### SendMessage
 
-Just text: 
-
-```php
-<?php
-use Formapro\TelegramBot\Bot;
-use function GuzzleHttp\Psr7\str;
-
-$bot = new Bot('telegramToken');
-
-$response = $this->bot->getWebhookInfo();
-
-echo str($response);
-```
-
-### SendMessage
-
 ```php
 <?php
 use Formapro\TelegramBot\Bot;
