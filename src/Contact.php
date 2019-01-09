@@ -20,7 +20,7 @@ class Contact
         return get_value($this, 'first_name');
     }
 
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return get_value($this, 'last_name');
     }
