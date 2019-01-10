@@ -114,6 +114,8 @@ $bot->sendMessage($sendMessage);
 
 ### InlineKeyboardButton
 
+Url: 
+
 ```php
 <?php
 use Formapro\TelegramBot\InlineKeyboardButton;
@@ -127,7 +129,7 @@ $data = json_decode($requestBody, true);
 
 $update = Update::create($data);
 
-$button = new InlineKeyboardButton('inline button');
+$button = InlineKeyboardButton::withUrl('inline button', 'https://your.app/link');
 $keyboard = new InlineKeyboardMarkup([[$button]]);
         
 $sendMessage = new SendMessage($update->getMessage()->getChat()->getId(), 'Click on inline button.');
@@ -137,7 +139,7 @@ $bot = new Bot('telegramToken');
 $bot->sendMessage($sendMessage);
 ```
 
-Inline link button: 
+CallbackQuery: 
 
 ```php
 <?php
@@ -152,15 +154,33 @@ $data = json_decode($requestBody, true);
 
 $update = Update::create($data);
 
-$linkButton = new InlineKeyboardButton('Go to site');
-$linkButton->setUrl('https://your.app/link');
-$keyboard = new InlineKeyboardMarkup([[$linkButton]]);
+$button = InlineKeyboardButton::withCallbackData('inline button', 'some_data');
+$keyboard = new InlineKeyboardMarkup([[$button]]);
         
-$sendMessage = new SendMessage($update->getMessage()->getChat()->getId(), 'Go to site');
+$sendMessage = new SendMessage($update->getMessage()->getChat()->getId(), 'Click on inline button.');
 $sendMessage->setReplyMarkup($keyboard);
                 
 $bot = new Bot('telegramToken');
 $bot->sendMessage($sendMessage);
+```
+
+## AnswerCallbackQuery
+
+```php
+<?php
+use Formapro\TelegramBot\AnswerCallbackQuery;
+use Formapro\TelegramBot\Bot;
+use Formapro\TelegramBot\Update;
+
+$requestBody = file_get_contents('php://input'); 
+$data = json_decode($requestBody, true);
+
+$update = Update::create($data);
+
+if ($callbackQuery = $update->getCallbackQuery()) {
+    $bot = new Bot('telegramToken');
+    $bot->answerCallbackQuery(new AnswerCallbackQuery($callbackQuery->getId()));
+}
 ```
 
 ## Developed by Forma-Pro

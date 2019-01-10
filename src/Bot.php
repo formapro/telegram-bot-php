@@ -51,6 +51,13 @@ class Bot
         ]);
     }
 
+    public function answerCallbackQuery(AnswerCallbackQuery $answerCallbackQuery): ResponseInterface
+    {
+        return $this->httpClient->post($this->getMethodUrl('answerCallbackQuery'), [
+            'json' => get_values($answerCallbackQuery),
+        ]);
+    }
+
     private function getMethodUrl(string $method): string
     {
         return sprintf('https://api.telegram.org/bot%s/%s', $this->token, $method);
