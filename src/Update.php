@@ -17,9 +17,14 @@ class Update
         return get_value($this, 'update_id');
     }
 
-    public function getMessage(): Message
+    public function getMessage(): ?Message
     {
         return get_object($this, 'message', Message::class);
+    }
+
+    public function getCallbackQuery(): ?CallbackQuery
+    {
+        return get_object($this, 'callback_query', CallbackQuery::class);
     }
 
     public static function create(array $data): self
