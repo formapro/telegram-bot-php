@@ -19,7 +19,7 @@ $setWebhook = new SetWebhook('https://your.app/telegram-updates-hook');
 // uncomment if use use self-signed certificate
 // $setWebhook->setCertificate(file_get_contents('/path/to/self-signed-certifcate.pem'));
 
-$response = $this->bot->setWebhook($setWebhook);
+$response = $bot->setWebhook($setWebhook);
 
 echo str($response);
 ```
@@ -33,7 +33,7 @@ use function GuzzleHttp\Psr7\str;
 
 $bot = new Bot('telegramToken');
 
-$response = $this->bot->getWebhookInfo();
+$response = $bot->getWebhookInfo();
 
 echo str($response);
 ```
