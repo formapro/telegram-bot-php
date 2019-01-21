@@ -3,6 +3,7 @@
 namespace Formapro\TelegramBot;
 
 use Psr\Http\Message\ResponseInterface;
+use function Makasim\Values\set_value;
 use function Makasim\Values\get_values;
 
 class Bot
@@ -48,6 +49,27 @@ class Bot
     {
         return $this->httpClient->post($this->getMethodUrl('sendMessage'), [
             'json' => get_values($sendMessage),
+        ]);
+    }
+
+    public function sendPhoto(SendPhoto $sendPhoto): ResponseInterface
+    {
+        $data[] = [
+            'name' => 'photo',
+            'contents' => $sendPhoto->getPhoto(),
+            'filename' => 'some_picture.jpg',
+        ];
+        set_value($sendPhoto, 'photo', null);
+
+        foreach (get_values($sendPhoto) as $name => $value) {
+            $data[] = [
+                'name' => $name,
+                'contents' => $value,
+            ];
+        }
+
+        return $this->httpClient->post($this->getMethodUrl('sendPhoto'), [
+            'multipart' => $data,
         ]);
     }
 

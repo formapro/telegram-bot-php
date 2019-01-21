@@ -58,6 +58,36 @@ $bot->sendMessage(new SendMessage(
 ));
 ```
 
+### SendPhoto
+
+```php
+<?php
+use Formapro\TelegramBot\Bot;
+use Formapro\TelegramBot\Update;
+use Formapro\TelegramBot\SendMessage;
+
+$requestBody = file_get_contents('php://input');
+$data = json_decode($requestBody, true);
+
+$update = Update::create($data);
+
+// You can pass URI of image or a path to file
+$picture = '/path/to/picture'; // OR link to outside url: https://some-server.com/some.jpg
+ 
+$data = json_decode($requestBody, true);
+
+$sendPhoto = new SendPhoto(
+    $update->getMessage()->getChat()->getId(),
+    $picture
+);
+
+// also you can set `caption` to image
+$sendPhoto->setCaption('Some caption under the picture');
+
+$bot = new Bot('telegramToken');
+$bot->sendPhoto($sendPhoto);
+```
+
 ### ReplyKeyboardMarkup
 
 ```php

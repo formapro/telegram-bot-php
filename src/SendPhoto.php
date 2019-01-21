@@ -4,18 +4,27 @@ namespace Formapro\TelegramBot;
 
 use function Makasim\Values\get_value;
 use function Makasim\Values\get_values;
+use function Makasim\Values\set_object;
 use function Makasim\Values\set_value;
 
-class SendMessage
+class SendPhoto
 {
     private $values = [];
 
     private $objects = [];
 
-    public function __construct(int $chatId, string $text)
+    public function __construct(int $chatId, string $photo)
     {
         set_value($this, 'chat_id', $chatId);
-        set_value($this, 'text', $text);
+
+        if (strpos($photo, 'http') !== false) {
+            set_value($this, 'photo', $photo);
+        } else {
+            if (!file_exists($photo)) {
+                throw new \InvalidArgumentException('Wrong path to file!');
+            }
+            set_value($this, 'photo', file_get_contents($photo));
+        }
     }
 
     public function getChatId(): int
@@ -23,9 +32,19 @@ class SendMessage
         return get_value($this, 'chat_id');
     }
 
-    public function getText(): string
+    public function getPhoto()
     {
-        return get_value($this, 'text');
+        return get_value($this, 'photo');
+    }
+
+    public function getCaption(): string
+    {
+        return get_value($this, 'caption');
+    }
+
+    public function setCaption(string $caption): void
+    {
+        set_value($this, 'caption', $caption);
     }
 
     public function setParseMode(string $parseMode): void
