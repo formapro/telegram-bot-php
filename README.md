@@ -72,13 +72,11 @@ $data = json_decode($requestBody, true);
 $update = Update::create($data);
 
 // You can pass URI of image or a path to file
-$picture = '/path/to/picture'; // OR link to outside url: https://some-server.com/some.jpg
+$picture = '/path/to/picture'; // OR https://some-server.com/some.jpg
  
-$data = json_decode($requestBody, true);
-
 $sendPhoto = new SendPhoto(
     $update->getMessage()->getChat()->getId(),
-    $picture
+    file_get_contents($picture) // or just $picture if it's url
 );
 
 // also you can set `caption` to image

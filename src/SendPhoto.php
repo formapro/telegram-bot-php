@@ -16,15 +16,7 @@ class SendPhoto
     public function __construct(int $chatId, string $photo)
     {
         set_value($this, 'chat_id', $chatId);
-
-        if (strpos($photo, 'http') !== false) {
-            set_value($this, 'photo', $photo);
-        } else {
-            if (!file_exists($photo)) {
-                throw new \InvalidArgumentException('Wrong path to file!');
-            }
-            set_value($this, 'photo', file_get_contents($photo));
-        }
+        set_value($this, 'photo', $photo);
     }
 
     public function getChatId(): int
@@ -32,7 +24,7 @@ class SendPhoto
         return get_value($this, 'chat_id');
     }
 
-    public function getPhoto()
+    public function getPhoto(): string
     {
         return get_value($this, 'photo');
     }

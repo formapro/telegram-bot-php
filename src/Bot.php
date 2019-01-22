@@ -54,14 +54,21 @@ class Bot
 
     public function sendPhoto(SendPhoto $sendPhoto): ResponseInterface
     {
+        if (strpos($sendPhoto->getPhoto(), 'http') === 0) {
+            return $this->httpClient->post($this->getMethodUrl('sendPhoto'), [
+                'json' => get_values($sendMessage),
+            ]);
+        }
+        $values = get_values($sendPhoto);
+
         $data[] = [
             'name' => 'photo',
-            'contents' => $sendPhoto->getPhoto(),
-            'filename' => 'some_picture.jpg',
+            'contents' => $values['photo'],
+            'filename' => 'picture.jpg',
         ];
-        set_value($sendPhoto, 'photo', null);
+        unset($values['photo']);
 
-        foreach (get_values($sendPhoto) as $name => $value) {
+        foreach ($values as $name => $value) {
             $data[] = [
                 'name' => $name,
                 'contents' => $value,
