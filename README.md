@@ -60,6 +60,9 @@ $bot->sendMessage(new SendMessage(
 
 ### SendPhoto
 
+**Note:** if you want to send gif with many pictures inside - 
+use `sendDocument`
+
 ```php
 <?php
 use Formapro\TelegramBot\Bot;
@@ -84,6 +87,37 @@ $sendPhoto->setCaption('Some caption under the picture');
 
 $bot = new Bot('telegramToken');
 $bot->sendPhoto($sendPhoto);
+```
+
+### SendDocument
+
+**Note:** _sending by URL will currently only work for
+gif, pdf and zip files._ (from documentation)
+
+```php
+<?php
+use Formapro\TelegramBot\Bot;
+use Formapro\TelegramBot\Update;
+use Formapro\TelegramBot\SendMessage;
+
+$requestBody = file_get_contents('php://input');
+$data = json_decode($requestBody, true);
+
+$update = Update::create($data);
+
+// You can pass URI of image or a path to file
+$document = 'https://some-server.com/some.pdf'; // OR /path/to/document 
+ 
+$sendDocument = new SendDocument(
+    $update->getMessage()->getChat()->getId(),
+    $document // or file_get_contents($document) if it's a local file
+);
+
+// also you can set `caption` to image
+$sendDocument->setCaption('Some caption under the document');
+
+$bot = new Bot('telegramToken');
+$bot->sendDocument($sendDocument);
 ```
 
 ### ReplyKeyboardMarkup
