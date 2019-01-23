@@ -28,6 +28,10 @@ class InlineKeyboardButton
 
     public function setCallbackData(?string $callbackData): void
     {
+        if (strlen($callbackData) > 64) {
+            throw new \Exception('Too long callback data, maximum 64 bytes allowed.');
+        }
+
         set_value($this, 'callback_data', $callbackData);
     }
 
