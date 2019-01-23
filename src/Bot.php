@@ -56,7 +56,7 @@ class Bot
     {
         if (strpos($sendPhoto->getPhoto(), 'http') === 0) {
             return $this->httpClient->post($this->getMethodUrl('sendPhoto'), [
-                'json' => get_values($sendMessage),
+                'json' => get_values($sendPhoto),
             ]);
         }
         $values = get_values($sendPhoto);
@@ -76,6 +76,34 @@ class Bot
         }
 
         return $this->httpClient->post($this->getMethodUrl('sendPhoto'), [
+            'multipart' => $data,
+        ]);
+    }
+
+    public function sendDocument(SendDocument $sendDocument): ResponseInterface
+    {
+        if (strpos($sendDocument->getDocument(), 'http') === 0) {
+            return $this->httpClient->post($this->getMethodUrl('sendDocument'), [
+                'json' => get_values($sendDocument),
+            ]);
+        }
+        $values = get_values($sendDocument);
+
+        $data[] = [
+            'name' => 'document',
+            'contents' => $values['document'],
+            'filename' => 'picture.jpg',
+        ];
+        unset($values['document']);
+
+        foreach ($values as $name => $value) {
+            $data[] = [
+                'name' => $name,
+                'contents' => $value,
+            ];
+        }
+
+        return $this->httpClient->post($this->getMethodUrl('sendDocument'), [
             'multipart' => $data,
         ]);
     }
