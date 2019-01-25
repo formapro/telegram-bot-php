@@ -120,6 +120,36 @@ $bot = new Bot('telegramToken');
 $bot->sendDocument($sendDocument);
 ```
 
+### SendInvoice
+
+```php
+<?php
+use Formapro\TelegramBot\Bot;
+use Formapro\TelegramBot\Update;
+use Formapro\TelegramBot\SendInvoice;
+
+$requestBody = file_get_contents('php://input');
+$data = json_decode($requestBody, true);
+
+$update = Update::create($data);
+$payload = []; // any params which you need to proccess in the transaction
+$providerToken = 'something:like:this'; // Token have to be taken from botFather
+
+$sendInvoice = new SendInvoice(
+    $update->getMessage()->getChat()->getId(),
+    'Your title',
+    'Your description of invoice',
+    json_encode($payload), 
+    $providerToken,
+    '12314czasdq', // unique id
+    'UAH',
+    [['label' => 'PriceLabel', 'amount' => 3001]] // amount; here 30.01 UAH
+);
+
+$bot = new Bot('telegramToken');
+$bot->sendInvoice($sendInvoice);
+```
+
 ### ReplyKeyboardMarkup
 
 ```php
