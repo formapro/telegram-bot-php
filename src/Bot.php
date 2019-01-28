@@ -108,6 +108,13 @@ class Bot
         ]);
     }
 
+    public function sendInvoice(SendInvoice $sendInvoice)
+    {
+        return $this->httpClient->post($this->getMethodUrl('sendInvoice'), [
+            'json' => get_values($sendInvoice),
+        ]);
+    }
+
     public function answerCallbackQuery(AnswerCallbackQuery $answerCallbackQuery): ResponseInterface
     {
         return $this->httpClient->post($this->getMethodUrl('answerCallbackQuery'), [
