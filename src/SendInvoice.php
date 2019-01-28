@@ -2,6 +2,7 @@
 
 namespace Formapro\TelegramBot;
 
+use function Makasim\Values\add_object;
 use function Makasim\Values\get_value;
 use function Makasim\Values\get_values;
 use function Makasim\Values\set_object;
@@ -31,7 +32,14 @@ class SendInvoice
         set_value($this, 'provider_token', $providerToken);
         set_value($this, 'start_parameter', $startParameter);
         set_value($this, 'currency', $currency);
-        set_objects($this, 'prices', $prices);
+
+        if (empty($prices)) {
+            throw new \InvalidArgumentException('Prices must be filled');
+        }
+
+        foreach ($prices as $price) {
+            $this->addPrice($price);
+        }
     }
 
     public function getChatId(): int
@@ -69,9 +77,17 @@ class SendInvoice
         return get_value($this, 'currency');
     }
 
+    /**
+     * @return LabeledPrice[]
+     */
     public function getPrices(): array
     {
         return get_value($this, 'prices');
+    }
+
+    private function addPrice(LabeledPrice $price): void
+    {
+        add_object($this, 'prices', $price);
     }
 
     public function setParseMode(string $parseMode): void

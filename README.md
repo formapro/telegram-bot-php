@@ -143,7 +143,7 @@ $sendInvoice = new SendInvoice(
     $providerToken,
     '12314czasdq', // unique id
     'UAH',
-    [['label' => 'PriceLabel', 'amount' => 3001]] // amount; here 30.01 UAH
+    [new LabeledPrice('PriceLabel_1', 3001)] // amount; here 30.01 UAH
 );
 
 $bot = new Bot('telegramToken');
