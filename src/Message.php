@@ -36,6 +36,16 @@ class Message
         return get_object($this, 'contact', Contact::class);
     }
 
+    /**
+     * It can be used only after sending invoice and successful paying for it.
+     *
+     * @return SuccessfulPayment|null
+     */
+    public function getSuccessfulPayment(): ?SuccessfulPayment
+    {
+        return get_object($this, 'successful_payment', SuccessfulPayment::class);
+    }
+
     public function getText(): ?string
     {
         return get_value($this, 'text');
