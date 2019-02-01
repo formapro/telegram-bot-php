@@ -122,6 +122,13 @@ class Bot
         ]);
     }
 
+    public function answerPreCheckoutQuery(AnswerPreCheckoutQuery $answerPreCheckoutQuery): ResponseInterface
+    {
+        return $this->httpClient->post($this->getMethodUrl('answerPreCheckoutQuery'), [
+            'json' => get_values($answerPreCheckoutQuery),
+        ]);
+    }
+
     private function getMethodUrl(string $method): string
     {
         return sprintf('https://api.telegram.org/bot%s/%s', $this->token, $method);
