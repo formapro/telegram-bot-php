@@ -27,6 +27,11 @@ class Update
         return get_object($this, 'callback_query', CallbackQuery::class);
     }
 
+    public function getPreCheckoutQuery(): ?PreCheckoutQuery
+    {
+        return get_object($this, 'pre_checkout_query', PreCheckoutQuery::class);
+    }
+
     public static function create(array $data): self
     {
         $update = new self();
