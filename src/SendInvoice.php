@@ -2,12 +2,12 @@
 
 namespace Formapro\TelegramBot;
 
-use function Makasim\Values\add_object;
-use function Makasim\Values\get_value;
-use function Makasim\Values\get_values;
-use function Makasim\Values\set_object;
-use function Makasim\Values\set_objects;
-use function Makasim\Values\set_value;
+use function Formapro\Values\add_object;
+use function Formapro\Values\get_value;
+use function Formapro\Values\get_values;
+use function Formapro\Values\set_object;
+use function Formapro\Values\set_objects;
+use function Formapro\Values\set_value;
 
 class SendInvoice
 {

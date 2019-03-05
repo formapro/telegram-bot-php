@@ -2,7 +2,7 @@
 
 namespace Formapro\TelegramBot;
 
-use function Makasim\Values\add_object;
+use function Formapro\Values\add_object;
 
 class InlineKeyboardMarkup implements ReplyMarkup
 {

@@ -1,9 +1,9 @@
 <?php
 namespace Formapro\TelegramBot;
 
-use function Makasim\Values\get_object;
-use function Makasim\Values\get_value;
-use function Makasim\Values\set_value;
+use function Formapro\Values\get_object;
+use function Formapro\Values\get_value;
+use function Formapro\Values\set_value;
 
 class PreCheckoutQuery
 {
