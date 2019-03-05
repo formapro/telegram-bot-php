@@ -2,7 +2,7 @@
 
 namespace Formapro\TelegramBot;
 
-use function Makasim\Values\get_value;
+use function Formapro\Values\get_value;
 
 class User
 {
