@@ -4,6 +4,9 @@ namespace Formapro\TelegramBot;
 
 use function Formapro\Values\get_value;
 
+/**
+ * https://core.telegram.org/bots/api#user
+ */
 class User
 {
     private $values = [];
