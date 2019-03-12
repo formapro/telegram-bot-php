@@ -52,16 +52,16 @@ class Bot
             'json' => get_values($sendMessage),
         ]);
 
-        $response = json_decode((string) $response->getBody(), true);
+        $json = json_decode((string) $response->getBody(), true);
 
-        if (isset($response['ok']) && $response['ok']) {
+        if (isset($json['ok']) && $json['ok']) {
             $message = new Message();
-            set_values($message, $response['result']);
+            set_values($message, $json['result']);
 
             return $message;
         }
 
-        return null;
+        throw new \LogicException('Unexpected response: '.(string) $response->getBody());
     }
 
     public function sendPhoto(SendPhoto $sendPhoto): ResponseInterface
@@ -147,16 +147,16 @@ class Bot
             'json' => get_values($editMessageText),
         ]);
 
-        $response = json_decode((string) $response->getBody(), true);
+        $json = json_decode((string) $response->getBody(), true);
 
-        if (isset($response['ok']) && $response['ok']) {
+        if (isset($json['ok']) && $json['ok']) {
             $message = new Message();
-            set_values($message, $response['result']);
+            set_values($message, $json['result']);
 
             return $message;
         }
 
-        return null;
+        throw new \LogicException('Unexpected response: '.(string) $response->getBody());
     }
 
     public function deleteMessage(DeleteMessage $deleteMessage): bool
