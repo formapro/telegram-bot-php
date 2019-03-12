@@ -2,6 +2,7 @@
 
 namespace Formapro\TelegramBot;
 
+use function Formapro\Values\set_values;
 use Psr\Http\Message\ResponseInterface;
 use function Formapro\Values\set_value;
 use function Formapro\Values\get_values;
@@ -45,11 +46,22 @@ class Bot
         return $this->httpClient->post($this->getMethodUrl('getWebhookInfo'));
     }
 
-    public function sendMessage(SendMessage $sendMessage): ResponseInterface
+    public function sendMessage(SendMessage $sendMessage): ?Message
     {
-        return $this->httpClient->post($this->getMethodUrl('sendMessage'), [
+        $response = $this->httpClient->post($this->getMethodUrl('sendMessage'), [
             'json' => get_values($sendMessage),
         ]);
+
+        $json = json_decode((string) $response->getBody(), true);
+
+        if (isset($json['ok']) && $json['ok']) {
+            $message = new Message();
+            set_values($message, $json['result']);
+
+            return $message;
+        }
+
+        throw new \LogicException('Unexpected response: '.(string) $response->getBody());
     }
 
     public function sendPhoto(SendPhoto $sendPhoto): ResponseInterface
@@ -127,6 +139,39 @@ class Bot
         return $this->httpClient->post($this->getMethodUrl('answerPreCheckoutQuery'), [
             'json' => get_values($answerPreCheckoutQuery),
         ]);
+    }
+
+    public function editMessageText(EditMessageText $editMessageText): ?Message
+    {
+        $response = $this->httpClient->post($this->getMethodUrl('editMessageText'), [
+            'json' => get_values($editMessageText),
+        ]);
+
+        $json = json_decode((string) $response->getBody(), true);
+
+        if (isset($json['ok']) && $json['ok']) {
+            $message = new Message();
+            set_values($message, $json['result']);
+
+            return $message;
+        }
+
+        throw new \LogicException('Unexpected response: '.(string) $response->getBody());
+    }
+
+    public function deleteMessage(DeleteMessage $deleteMessage): bool
+    {
+        $response = $this->httpClient->post($this->getMethodUrl('deleteMessage'), [
+            'json' => get_values($deleteMessage),
+        ]);
+
+        $response = json_decode((string) $response->getBody(), true);
+
+        if (isset($response['ok']) && $response['ok']) {
+            return true;
+        }
+
+        return false;
     }
 
     private function getMethodUrl(string $method): string

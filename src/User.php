@@ -20,10 +20,10 @@ class User
 
     public function isBot(): bool
     {
-        return get_value($this, 'is_bot');
+        return get_value($this, 'is_bot', false);
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return get_value($this, 'first_name');
     }

@@ -14,8 +14,11 @@ class ReplyKeyboardMarkup implements ReplyMarkup
 
     /**
      * @param KeyboardButton[] $keyboard
+     * @param bool $oneTimeKeyboard
+     * @param bool $resizeKeyboard
+     * @param bool $selective
      */
-    public function __construct(array $keyboard)
+    public function __construct(array $keyboard, bool $oneTimeKeyboard = false, bool $resizeKeyboard = true, bool $selective = false)
     {
         if (empty($keyboard)) {
             throw new \InvalidArgumentException('keyboard argument is required');
@@ -26,6 +29,10 @@ class ReplyKeyboardMarkup implements ReplyMarkup
                 $this->addButton($rowNumber, $button);
             }
         }
+
+        set_value($this, 'one_time_keyboard', $oneTimeKeyboard);
+        set_value($this, 'resize_keyboard', $resizeKeyboard);
+        set_value($this, 'selective', $selective);
     }
 
     public function addButton(int $row, KeyboardButton $button): void
@@ -41,5 +48,15 @@ class ReplyKeyboardMarkup implements ReplyMarkup
     public function isOneTimeKeyboard(): bool
     {
         return get_value($this, 'one_time_keyboard', false);
+    }
+
+    public function isResizeKeyboard(): bool
+    {
+        return get_value($this, 'resize_keyboard', false);
+    }
+
+    public function isSelective(): bool
+    {
+        return get_value($this, 'selective', false);
     }
 }
