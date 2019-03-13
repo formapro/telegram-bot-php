@@ -46,7 +46,7 @@ class Bot
         return $this->httpClient->post($this->getMethodUrl('getWebhookInfo'));
     }
 
-    public function sendMessage(SendMessage $sendMessage): ?Message
+    public function sendMessage(SendMessage $sendMessage): Message
     {
         $response = $this->httpClient->post($this->getMethodUrl('sendMessage'), [
             'json' => get_values($sendMessage),
@@ -92,32 +92,60 @@ class Bot
         ]);
     }
 
-    public function sendDocument(SendDocument $sendDocument): ResponseInterface
+    public function sendDocument(SendDocument $sendDocument): Message
     {
-        if (strpos($sendDocument->getDocument(), 'http') === 0) {
-            return $this->httpClient->post($this->getMethodUrl('sendDocument'), [
-                'json' => get_values($sendDocument),
+        $doc = $sendDocument->getDocument();
+
+        if ($doc instanceof FileId || $doc instanceof FileUrl) {
+            $data = get_values($sendDocument);
+            $data['document'] = (string) $doc;
+
+            $response = $this->httpClient->post($this->getMethodUrl('sendDocument'), [
+                'json' => $data,
             ]);
+
+            $json = json_decode((string) $response->getBody(), true);
+            if (isset($json['ok']) && $json['ok']) {
+                $message = new Message();
+                set_values($message, $json['result']);
+
+                return $message;
+            }
+
+            throw new \LogicException('Unexpected response: '.(string) $response->getBody());
         }
-        $values = get_values($sendDocument);
 
-        $data[] = [
-            'name' => 'document',
-            'contents' => $values['document'],
-            'filename' => 'picture.jpg',
-        ];
-        unset($values['document']);
-
-        foreach ($values as $name => $value) {
+        if ($doc instanceof InputFile) {
             $data[] = [
-                'name' => $name,
-                'contents' => $value,
+                'name' => 'document',
+                'contents' => $doc->getContent(),
+                'filename' => $doc->getFileName(),
             ];
+
+            $values = get_values($sendDocument);
+            foreach ($values as $name => $value) {
+                $data[] = [
+                    'name' => $name,
+                    'contents' => $value,
+                ];
+            }
+
+            $response = $this->httpClient->post($this->getMethodUrl('sendDocument'), [
+                'multipart' => $data,
+            ]);
+
+            $json = json_decode((string) $response->getBody(), true);
+            if (isset($json['ok']) && $json['ok']) {
+                $message = new Message();
+                set_values($message, $json['result']);
+
+                return $message;
+            }
+
+            throw new \LogicException('Unexpected response: '.(string) $response->getBody());
         }
 
-        return $this->httpClient->post($this->getMethodUrl('sendDocument'), [
-            'multipart' => $data,
-        ]);
+        throw new \LogicException(sprintf('Unexpected document: %s'.get_class($doc)));
     }
 
     public function sendInvoice(SendInvoice $sendInvoice)

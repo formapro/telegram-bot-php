@@ -98,7 +98,10 @@ gif, pdf and zip files._ (from documentation)
 <?php
 use Formapro\TelegramBot\Bot;
 use Formapro\TelegramBot\Update;
-use Formapro\TelegramBot\SendMessage;
+use Formapro\TelegramBot\SendDocument;
+use Formapro\TelegramBot\FileUrl;
+use Formapro\TelegramBot\FileId;
+use Formapro\TelegramBot\InputFile;
 
 $requestBody = file_get_contents('php://input');
 $data = json_decode($requestBody, true);
@@ -106,11 +109,17 @@ $data = json_decode($requestBody, true);
 $update = Update::create($data);
 
 // You can pass URI of image or a path to file
-$document = 'https://some-server.com/some.pdf'; // OR /path/to/document 
- 
-$sendDocument = new SendDocument(
+//$document = new FileUrl('https://some-server.com/some.pdf');
+
+// You can pass an ID of already stored file on Telegram side.
+//$document = new FileId('123');
+
+// You can pass local file.
+$document = new InputFile('test.txt', 'Hi there!');
+
+$sendDocument = SendDocument::withInputFile(
     $update->getMessage()->getChat()->getId(),
-    $document // or file_get_contents($document) if it's a local file
+    $document
 );
 
 // also you can set `caption` to image

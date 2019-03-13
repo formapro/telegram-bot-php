@@ -11,12 +11,13 @@ class SendDocument
 {
     private $values = [];
 
-    private $objects = [];
+    private $document;
 
-    public function __construct(int $chatId, string $document)
+    private function __construct(int $chatId, File $document)
     {
         set_value($this, 'chat_id', $chatId);
-        set_value($this, 'document', $document);
+
+        $this->document = $document;
     }
 
     public function getChatId(): int
@@ -24,9 +25,9 @@ class SendDocument
         return get_value($this, 'chat_id');
     }
 
-    public function getDocument(): string
+    public function getDocument(): File
     {
-        return get_value($this, 'document');
+        return $this->document;
     }
 
     public function getCaption(): string
@@ -52,5 +53,20 @@ class SendDocument
     public function setReplyMarkup(ReplyMarkup $replyMarkup): void
     {
         set_value($this, 'reply_markup', json_encode(get_values($replyMarkup)));
+    }
+
+    public static function withInputFile(int $chatId, InputFile $file): self
+    {
+        return new static($chatId, $file);
+    }
+
+    public static function withFileUrl(int $chatId, FileUrl $file): self
+    {
+        return new static($chatId, $file);
+    }
+
+    public static function withFileId(int $chatId, FileId $file): self
+    {
+        return new static($chatId, $file);
     }
 }
