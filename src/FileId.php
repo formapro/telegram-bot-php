@@ -4,7 +4,7 @@ namespace Formapro\TelegramBot;
 /**
  * @see https://core.telegram.org/bots/api#sending-files
  */
-class FileId implements File
+class FileId
 {
     private $fileId;
 

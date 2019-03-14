@@ -36,6 +36,11 @@ class Message
         return get_object($this, 'contact', Contact::class);
     }
 
+    public function getDocument(): ?Document
+    {
+        return get_object($this, 'document', Document::class);
+    }
+
     /**
      * It can be used only after sending invoice and successful paying for it.
      *

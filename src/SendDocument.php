@@ -11,9 +11,16 @@ class SendDocument
 {
     private $values = [];
 
+    /**
+     * @var FileId|FileUrl|InputFile 
+     */
     private $document;
 
-    private function __construct(int $chatId, File $document)
+    /**
+     * @param int $chatId
+     * @param FileId|FileUrl|InputFile $document
+     */
+    private function __construct(int $chatId, $document)
     {
         set_value($this, 'chat_id', $chatId);
 
@@ -25,7 +32,10 @@ class SendDocument
         return get_value($this, 'chat_id');
     }
 
-    public function getDocument(): File
+    /**
+     * @return FileId|FileUrl|InputFile
+     */
+    public function getDocument()
     {
         return $this->document;
     }

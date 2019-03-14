@@ -61,7 +61,7 @@ class Bot
             return $message;
         }
 
-        throw new \LogicException('Unexpected response: '.(string) $response->getBody());
+        throw new \LogicException('Unexpected response: ' . (string)$response->getBody());
     }
 
     public function sendPhoto(SendPhoto $sendPhoto): ResponseInterface
@@ -98,13 +98,13 @@ class Bot
 
         if ($doc instanceof FileId || $doc instanceof FileUrl) {
             $data = get_values($sendDocument);
-            $data['document'] = (string) $doc;
+            $data['document'] = (string)$doc;
 
             $response = $this->httpClient->post($this->getMethodUrl('sendDocument'), [
                 'json' => $data,
             ]);
 
-            $json = json_decode((string) $response->getBody(), true);
+            $json = json_decode((string)$response->getBody(), true);
             if (isset($json['ok']) && $json['ok']) {
                 $message = new Message();
                 set_values($message, $json['result']);
@@ -112,7 +112,7 @@ class Bot
                 return $message;
             }
 
-            throw new \LogicException('Unexpected response: '.(string) $response->getBody());
+            throw new \LogicException('Unexpected response: ' . (string)$response->getBody());
         }
 
         if ($doc instanceof InputFile) {
@@ -134,7 +134,7 @@ class Bot
                 'multipart' => $data,
             ]);
 
-            $json = json_decode((string) $response->getBody(), true);
+            $json = json_decode((string)$response->getBody(), true);
             if (isset($json['ok']) && $json['ok']) {
                 $message = new Message();
                 set_values($message, $json['result']);
@@ -142,10 +142,10 @@ class Bot
                 return $message;
             }
 
-            throw new \LogicException('Unexpected response: '.(string) $response->getBody());
+            throw new \LogicException('Unexpected response: ' . (string) $response->getBody());
         }
 
-        throw new \LogicException(sprintf('Unexpected document: %s'.get_class($doc)));
+        throw new \LogicException(sprintf('Unexpected document: %s' . get_class($doc)));
     }
 
     public function sendInvoice(SendInvoice $sendInvoice)
@@ -175,7 +175,7 @@ class Bot
             'json' => get_values($editMessageText),
         ]);
 
-        $json = json_decode((string) $response->getBody(), true);
+        $json = json_decode((string)$response->getBody(), true);
 
         if (isset($json['ok']) && $json['ok']) {
             $message = new Message();
@@ -184,7 +184,7 @@ class Bot
             return $message;
         }
 
-        throw new \LogicException('Unexpected response: '.(string) $response->getBody());
+        throw new \LogicException('Unexpected response: ' . (string) $response->getBody());
     }
 
     public function deleteMessage(DeleteMessage $deleteMessage): bool
@@ -193,13 +193,38 @@ class Bot
             'json' => get_values($deleteMessage),
         ]);
 
-        $response = json_decode((string) $response->getBody(), true);
+        $response = json_decode((string)$response->getBody(), true);
 
         if (isset($response['ok']) && $response['ok']) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @see https://core.telegram.org/bots/api#getfile
+     */
+    public function getFile(GetFile $getFile): File
+    {
+        $response = $this->httpClient->post($this->getMethodUrl('getFile'), [
+            'json' => get_values($getFile),
+        ]);
+
+        $json = json_decode((string) $response->getBody(), true);
+
+        if (isset($json['ok']) && $json['ok']) {
+            $file = new File();
+            set_values($file, $json['result']);
+
+            if ($path = $file->getFilePath()) {
+                $file->setFileUrl(sprintf('https://api.telegram.org/file/bot%s/%s', $this->token, $path));
+            }
+
+            return $file;
+        }
+
+        throw new \LogicException('Unexpected response: ' . (string) $response->getBody());
     }
 
     private function getMethodUrl(string $method): string
