@@ -40,6 +40,16 @@ class InlineKeyboardButton
         return get_value($this, 'callback_data');
     }
 
+    public function setPay(bool $pay): void
+    {
+        set_value($this, 'pay', $pay);
+    }
+
+    public function isPay(): bool
+    {
+        return get_value($this, 'pay', false);
+    }
+
     public static function withUrl(string $text, string $url): self
     {
         $button = new self($text);
