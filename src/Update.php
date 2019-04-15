@@ -22,6 +22,11 @@ class Update
         return get_object($this, 'message', Message::class);
     }
 
+    public function getEditedMessage(): ?Message
+    {
+        return get_object($this, 'edited_message', Message::class);
+    }
+
     public function getCallbackQuery(): ?CallbackQuery
     {
         return get_object($this, 'callback_query', CallbackQuery::class);
