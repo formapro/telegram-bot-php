@@ -13,9 +13,9 @@ class Bot
 
     private $httpClient;
 
-    public function __construct(string $token)
+    public function __construct(string $token, array $clientConfig = [])
     {
-        $this->httpClient = new \GuzzleHttp\Client();
+        $this->httpClient = new \GuzzleHttp\Client($clientConfig);
         $this->token = $token;
     }
 
