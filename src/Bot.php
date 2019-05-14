@@ -3,6 +3,7 @@
 namespace Formapro\TelegramBot;
 
 use function Formapro\Values\set_values;
+use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use function Formapro\Values\set_value;
 use function Formapro\Values\get_values;
@@ -13,10 +14,10 @@ class Bot
 
     private $httpClient;
 
-    public function __construct(string $token)
+    public function __construct(string $token, ClientInterface $httpClient = null)
     {
-        $this->httpClient = new \GuzzleHttp\Client();
         $this->token = $token;
+        $this->httpClient = $httpClient ?? new \GuzzleHttp\Client();
     }
 
     public function setWebhook(SetWebhook $setWebhook): ResponseInterface
