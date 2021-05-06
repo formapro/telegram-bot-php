@@ -12,7 +12,7 @@ class SendMessage
 
     private $objects = [];
 
-    public function __construct(int $chatId, string $text)
+    public function __construct(string $chatId, string $text)
     {
         set_value($this, 'chat_id', $chatId);
         set_value($this, 'text', $text);
