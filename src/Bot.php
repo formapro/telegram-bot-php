@@ -170,12 +170,7 @@ class Bot
         ]);
     }
 
-    public function editMessageText(EditMessageText $editMessageText): ?Message
-    {
-        $response = $this->httpClient->post($this->getMethodUrl('editMessageText'), [
-            'json' => get_values($editMessageText),
-        ]);
-
+    private function editMessageResponse($response) {
         $json = json_decode((string)$response->getBody(), true);
 
         if (isset($json['ok']) && $json['ok']) {
@@ -186,6 +181,26 @@ class Bot
         }
 
         throw new \LogicException('Unexpected response: ' . (string) $response->getBody());
+    }
+
+    public function editMessageMarkup(EditMessageText $editMessageText): ?Message
+    {
+        echo print_r(get_values($editMessageText));
+
+        $response = $this->httpClient->post($this->getMethodUrl('editMessageReplyMarkup'), [
+            'json' => get_values($editMessageText),
+        ]);
+
+        return $this->editMessageResponse($response);
+    }
+    
+    public function editMessageText(EditMessageText $editMessageText): ?Message
+    {
+        $response = $this->httpClient->post($this->getMethodUrl('editMessageText'), [
+            'json' => get_values($editMessageText),
+        ]);
+
+        return $this->editMessageResponse($response);
     }
 
     public function deleteMessage(DeleteMessage $deleteMessage): bool
