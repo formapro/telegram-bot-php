@@ -13,7 +13,7 @@ class SendPhoto
 
     private $objects = [];
 
-    public function __construct(int $chatId, string $photo)
+    public function __construct(string $chatId, string $photo)
     {
         set_value($this, 'chat_id', $chatId);
         set_value($this, 'photo', $photo);
